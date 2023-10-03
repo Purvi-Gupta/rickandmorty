@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Card from "./component/Card";
 import axios from "axios";
@@ -6,29 +6,42 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 function App() {
   const [items, setItems] = useState([]);
-  let page = 1;
-const fetchData = (setItems, items) => {
-  axios
-   .get(`https://rickandmortyapi.com/api/character/?page=${page}`)
-   .then((data) => {
-     setItems([...data.data.results]);
-     page = page + 1;
-   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+const fetchData =async () => {
+  setIsLoading(true);
+  setError(null);
+  try {
+  const data = await axios.get(`https://rickandmortyapi.com/api/character/?page=${page}`)
+
+     setItems(prevItems=>[...prevItems,...data.data.results]);
+     setPage(prevPage => prevPage + 1);
+   } catch (error) {
+    setError(error);
+  } finally {
+    setIsLoading(false);
+  }
 };
+
+useEffect(() => {
+  fetchData();
+}, []);
 
 
   return (
     <>
         <InfiniteScroll
           dataLength={items.length}
-          next={fetchData(setItems, items)}
-          hasMore={true} // Replace with a condition based on your data source
+          next={fetchData}
+          hasMore={true} 
           loader={<p>Loading...</p>}
           endMessage={<p>No more data to load.</p>}
+          
         >
-      <div className="container">
-          {items.map((data) => {
-            return <Card key={data.id} data={data} />;
+      <div className="container" >
+          {items.map((data,index) => {
+            return <Card key={index} data={data} />;
           })}
       </div>
         </InfiniteScroll>
