@@ -10,42 +10,43 @@ function App() {
   const [, setIsLoading] = useState(false);
   const [, setError] = useState(null);
   const [page, setPage] = useState(1);
-const fetchData =async () => {
-  setIsLoading(true);
-  setError(null);
-  try {
-  const data = await axios.get(`https://rickandmortyapi.com/api/character/?page=${page}`)
+  
+  const fetchData = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await axios.get(
+        `https://rickandmortyapi.com/api/character/?page=${page}`
+      );
 
-     setItems(prevItems=>[...prevItems,...data.data.results]);
-     setPage(prevPage => prevPage + 1);
-   } catch (error) {
-    setError(error);
-  } finally {
-    setIsLoading(false);
-  }
-};
+      setItems((prevItems) => [...prevItems, ...data.data.results]);
+      setPage((prevPage) => prevPage + 1);
+    } catch (error) {
+      setError(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-useEffect(() => {
-  fetchData();
-});
-
+  useEffect(() => {
+    fetchData();
+  });
 
   return (
     <>
-        <InfiniteScroll
-          dataLength={items.length}
-          next={fetchData}
-          hasMore={true} 
-          loader={<p>Loading...</p>}
-          endMessage={<p>No more data to load.</p>}
-          
-        >
-      <div className="container" >
-          {items.map((data,index) => {
+      <InfiniteScroll
+        dataLength={items.length}
+        next={fetchData}
+        hasMore={true}
+        loader={<p>Loading...</p>}
+        endMessage={<p>No more data to load.</p>}
+      >
+        <div className="container">
+          {items.map((data, index) => {
             return <Card key={index} data={data} />;
           })}
-      </div>
-        </InfiniteScroll>
+        </div>
+      </InfiniteScroll>
     </>
   );
 }

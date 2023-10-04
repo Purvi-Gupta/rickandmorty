@@ -1,20 +1,20 @@
-import React from "react"
-import { useState, useEffect } from "react";
+import React from "react";
+// import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
+// import axios from "axios";
 
 function Card({ data }) {
-  const [episode, setEpisode] = useState([]);
+  // const [episode, setEpisode] = useState([]);
 
-  useEffect(() => {
-    let epiurl = data.episode[0];
-    const fetchData = async () => {
-      const epidata = await axios.get(`${epiurl}`);
-    //   console.log(epidata);
-      setEpisode(epidata.data.name);
-    };
-    fetchData();
-  });
+  // useEffect(() => {
+  //   let epiurl = data.episode[0];
+  //   const fetchData = async () => {
+  //     const epidata = await axios.get(`${epiurl}`);
+  //     //   console.log(epidata);
+  //     setEpisode(epidata.data.name);
+  //   };
+  //   fetchData();
+  // });
 
   return (
     <>
@@ -28,18 +28,21 @@ function Card({ data }) {
             <p>
               {data.status} | {data.species} | {data.gender}
             </p>
-          </div><br/>
+          </div>
+          <br />
           <div className="location">
-          <p>Last known Location</p>
+            <p>Last known Location</p>
             <h3>
               {data.location.name}{" "}
               {data.origin.name == "unknown" ? "" : `| ${data.origin.name}`}{" "}
             </h3>
-          </div><br/>
+          </div>
+          <br />
           <div className="Chapter">
-          <p>Character in Episode</p>
-            <h3>{episode}</h3>
-          </div><br/>
+            <p>Character in Episode</p>
+            {/* <h3>{episode}</h3> */}
+          </div>
+          <br />
         </div>
       </div>
     </>
@@ -49,5 +52,5 @@ function Card({ data }) {
 export default Card;
 
 Card.propTypes = {
-  data:PropTypes.object
-}
+  data: PropTypes.object,
+};
