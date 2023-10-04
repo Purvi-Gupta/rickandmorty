@@ -1,4 +1,6 @@
+import React from "react"
 import { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import axios from "axios";
 
 function Card({ data }) {
@@ -12,7 +14,7 @@ function Card({ data }) {
       setEpisode(epidata.data.name);
     };
     fetchData();
-  }, []);
+  });
 
   return (
     <>
@@ -45,3 +47,7 @@ function Card({ data }) {
 }
 
 export default Card;
+
+Card.propTypes = {
+  data:PropTypes.object
+}

@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import "./App.css";
 import Card from "./component/Card";
@@ -6,8 +7,8 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 function App() {
   const [items, setItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [, setIsLoading] = useState(false);
+  const [, setError] = useState(null);
   const [page, setPage] = useState(1);
 const fetchData =async () => {
   setIsLoading(true);
@@ -26,7 +27,7 @@ const fetchData =async () => {
 
 useEffect(() => {
   fetchData();
-}, []);
+});
 
 
   return (
