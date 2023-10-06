@@ -1,20 +1,20 @@
 import React from "react";
-// import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-// import axios from "axios";
+import axios from "axios";
 
 function Card({ data }) {
-  // const [episode, setEpisode] = useState([]);
+  const [episode, setEpisode] = useState([]);
 
-  // useEffect(() => {
-  //   let epiurl = data.episode[0];
-  //   const fetchData = async () => {
-  //     const epidata = await axios.get(`${epiurl}`);
-  //     //   console.log(epidata);
-  //     setEpisode(epidata.data.name);
-  //   };
-  //   fetchData();
-  // });
+  useEffect(() => {
+    let epiurl = data.episode[0];
+    const fetchData = async () => {
+      const epidata = await axios.get(`${epiurl}`);
+      //   console.log(epidata);
+      setEpisode(epidata.data.name);
+    };
+    fetchData();
+  });
 
   return (
     <>
@@ -40,7 +40,7 @@ function Card({ data }) {
           <br />
           <div className="Chapter">
             <p>Character in Episode</p>
-            {/* <h3>{episode}</h3> */}
+            <h3>{episode}</h3>
           </div>
           <br />
         </div>

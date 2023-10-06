@@ -7,10 +7,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 function App() {
   const [items, setItems] = useState([]);
-  const [, setIsLoading] = useState(false);
+  const [loding, setIsLoading] = useState(false);
   const [, setError] = useState(null);
   const [page, setPage] = useState(1);
-  
+
   const fetchData = async () => {
     setIsLoading(true);
     setError(null);
@@ -23,6 +23,7 @@ function App() {
       setPage((prevPage) => prevPage + 1);
     } catch (error) {
       setError(error);
+      console.log(`server is not responding`);
     } finally {
       setIsLoading(false);
     }
@@ -30,14 +31,14 @@ function App() {
 
   useEffect(() => {
     fetchData();
-  });
+  },[items]);
 
   return (
     <>
       <InfiniteScroll
         dataLength={items.length}
         next={fetchData}
-        hasMore={true}
+        hasMore={loding}
         loader={<p>Loading...</p>}
         endMessage={<p>No more data to load.</p>}
       >
