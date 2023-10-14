@@ -1,24 +1,50 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import axios from "axios";
+// import axios from "axios";
+import { Link } from "react-router-dom";
+import { Store } from "../App";
 
-function Card({ data }) {
-  const [episode, setEpisode] = useState([]);
+function Card({ searchString }) {
+  // const [episode, setEpisode] = useState([]);
+    const [filterItem,SetfilterItems] = useState([]);
+    const {items} = useContext(Store);
+
+  const searchHandler = () =>{
+      try {
+        const search = items.filter((item)=>{
+          return item.name.toLowerCase().includes(searchString.toLowerCase())
+          || item.status.toLowerCase().includes(searchString.toLowerCase())
+          || item.gender.toLowerCase() === searchString.toLocaleLowerCase()
+          || item.species.toLowerCase().includes(searchString.toLowerCase())
+          || item.location.name.toLowerCase().includes(searchString.toLowerCase())
+        });
+        SetfilterItems(search);
+
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
   useEffect(() => {
-    let epiurl = data.episode[0];
-    const fetchData = async () => {
-      const epidata = await axios.get(`${epiurl}`);
-      //   console.log(epidata);
-      setEpisode(epidata.data.name);
-    };
-    fetchData();
-  });
+    SetfilterItems(items)
+    // let epiurl = data.episode[0];
+    // const fetchData = async () => {
+    //   const epidata = await axios.get(`${epiurl}`);
+    //   //   console.log(epidata);
+    //   setEpisode(epidata.data.name);
+    // };
+    // fetchData();
+    searchHandler();
+  },[searchString,items]);
 
   return (
     <>
-      <div className="card">
+    {
+    filterItem.map((data,index)=>{
+      return(
+        <Link to={`/profile/${data.id}`} key={index}>
+        <div className="card" >
         <div className="card-img">
           <img src={data.image} />
         </div>
@@ -34,17 +60,22 @@ function Card({ data }) {
             <p>Last known Location</p>
             <h3>
               {data.location.name}{" "}
-              {data.origin.name == "unknown" ? "" : `| ${data.origin.name}`}{" "}
+              {data.origin.name == "unknown" ? "" : `|
+${data.origin.name}`}{" "}
             </h3>
           </div>
           <br />
-          <div className="Chapter">
+          <div className="Chapter" >
             <p>Character in Episode</p>
-            <h3>{episode}</h3>
+            {/* <h3>{episode}</h3> */}
           </div>
           <br />
         </div>
       </div>
+      </Link>
+      )
+    })}
+
     </>
   );
 }

@@ -1,11 +1,15 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState} from "react";
 import "./App.css";
-import Card from "./component/Card";
+import Profile from "./component/Profile";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./component/Home";
 import axios from "axios";
-import InfiniteScroll from "react-infinite-scroll-component";
+
+
+export const Store = createContext();
 
 function App() {
+
   const [items, setItems] = useState([]);
   const [loding, setIsLoading] = useState(false);
   const [, setError] = useState(null);
@@ -15,14 +19,14 @@ function App() {
     setIsLoading(true);
     setError(null);
     try {
+
       const data = await axios.get(
         `https://rickandmortyapi.com/api/character/?page=${page}`
       );
-
       setItems((prevItems) => [...prevItems, ...data.data.results]);
       setPage((prevPage) => prevPage + 1);
     } catch (error) {
-      setError(error);
+      // setError(error);
       console.log(`server is not responding`);
     } finally {
       setIsLoading(false);
@@ -30,24 +34,22 @@ function App() {
   };
 
   useEffect(() => {
-    fetchData();
+    if (page<2) {
+
+      fetchData();
+    }
   },[items]);
 
   return (
     <>
-      <InfiniteScroll
-        dataLength={items.length}
-        next={fetchData}
-        hasMore={loding}
-        loader={<p>Loading...</p>}
-        endMessage={<p>No more data to load.</p>}
-      >
-        <div className="container">
-          {items.map((data, index) => {
-            return <Card key={index} data={data} />;
-          })}
-        </div>
-      </InfiniteScroll>
+    <Store.Provider value={{items,fetchData,loding}}>
+     <BrowserRouter>
+     <Routes>
+      <Route path="/" element={<Home/>}/>
+      <Route path="/profile/:id" element={<Profile/>}/>
+     </Routes>
+      </BrowserRouter>
+      </Store.Provider>
     </>
   );
 }
